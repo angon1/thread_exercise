@@ -18,8 +18,8 @@ def test_setup(arr_to_test, benchmark, rand_arr):
 def test_power_single_thread(benchmark):
     benchmark(power_single_thread)
         
-def test_power_multitple_threads(benchmark):
-    benchmark(power_multitple_threads)
+# def test_power_multitple_threads(benchmark):
+#     benchmark(power_multitple_threads)
 
-def test_power_multiprocess(benchmark):
-    benchmark(power_multiprocess)
+# def test_power_multiprocess(benchmark):
+#     benchmark(power_multiprocess)

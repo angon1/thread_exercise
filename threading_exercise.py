@@ -23,8 +23,8 @@ def pow_list(lock:threading.Lock) -> list:
 
 def power_single_thread() -> list:
     
-    global _index 
-    _index = 0
+    # global _index 
+    # _index = 0
     lock = threading.Lock()
     my_thread = threading.Thread(name='pow_list', target=pow_list, args=(lock,))
     my_thread.start()
@@ -34,8 +34,8 @@ def power_single_thread() -> list:
 
 def power_multitple_threads() -> list:
     
-    global _index 
-    _index = 0
+    # global _index 
+    # _index = 0
     lock = threading.Lock()
     my_threads = [threading.Thread(name=f't{x}', target=pow_list, args=(lock,)) for x in range(3)]
     
