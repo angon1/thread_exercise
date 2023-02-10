@@ -1,50 +1,55 @@
 import threading
 import multiprocessing
+# import multiprocessing
+from data_ops import MyData, load_namedtuple, save_namedtuple
+from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
-_ARR_SIZE = 10
-_arr = list(range(_ARR_SIZE))
-_index = 0
 
 def pow_list(lock:threading.Lock) -> list:
-    global _index
     while True:
         lock.acquire()
-        if _index < len(_arr):
-            _arr[_index] = _arr[_index]**2
-            _index += 1
-            print(threading.current_thread().name, _index)
-            lock.release()
-        else:
+        data_struct = load_namedtuple()
+        if data_struct.index >= data_struct.arr_len:
             lock.release()
             return
-        
-        
-    
+        data_struct.arr[data_struct.index] **=2
+        data_struct.index+=1
+        save_namedtuple(data_struct)
+        lock.release()
+
 
 def power_single_thread() -> list:
-    
-    # global _index 
-    # _index = 0
     lock = threading.Lock()
     my_thread = threading.Thread(name='pow_list', target=pow_list, args=(lock,))
     my_thread.start()
     my_thread.join()
     return []
 
-
 def power_multitple_threads() -> list:
-    
-    # global _index 
-    # _index = 0
+    # executor = ThreadPoolExecutor(max_workers=5)
     lock = threading.Lock()
-    my_threads = [threading.Thread(name=f't{x}', target=pow_list, args=(lock,)) for x in range(3)]
+    workers_count = 5
     
-    for thread in my_threads:
-        print(thread)
-        thread.start()
-    for thread in my_threads:
-        thread.join()     
+    with ThreadPoolExecutor(max_workers=workers_count) as executor:
+        executor.map(pow_list, [lock]*workers_count)
+
     return []
 
+# def power_multitple_threads() -> list:
+#     lock = threading.Lock()
+#     my_threads = [threading.Thread(name=f't{x}', target=pow_list, args=(lock,)) for x in range(3)]
+#     for thread in my_threads:
+#         thread.start()
+#     for thread in my_threads:
+#         thread.join()     
+#     return []
+
 def power_multiprocess() -> list:
+    # executor = ThreadPoolExecutor(max_workers=5)
+    lock = multiprocessing.Lock()
+    workers_count = 5
+    
+    with ProcessPoolExecutor(max_workers=workers_count) as executor:
+        executor.map(pow_list, [lock]*workers_count)
+
     return []

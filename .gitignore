@@ -144,3 +144,7 @@ cython_debug/
 # Generated files
 id_generator_state
 lockfile.lock
+
+
+#pickle
+*.pkl
